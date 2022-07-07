@@ -1,14 +1,22 @@
 require("wait_group")
 
 GMAudit.steamIDQueue = {}
-function GMAudit.SyncAllULibUsers() 
+function GMAudit.SyncAllUsers() 
 	local steamIDs = {}
+	local found = {}
+
 	for k, v in pairs(ULib.ucl.users) do
 		
 		if string.StartWith(k, "STEAM") then
 			local steamID64 = util.SteamIDTo64(k)
+			found[steamID64] = true
 			table.insert(steamIDs, steamID64)
 		end
+	end
+
+	local offlineAwarnData = sql.Query("SELECT * FROM awarn_offlinedata") or {}
+	for k, v in pairs(offlineAwarnData) do
+		
 	end
 
 	timer.Adjust("GMAudit_ProcessQueue", 1, nil, nil)
@@ -42,13 +50,12 @@ function GMAudit.ProcessQueue()
 	
 	local realm = GetConVar( "gm_audit_realm" )
 	local token =  GetConVar( "gm_audit_token" )
-	
-	print("Items left in queue:", #GMAudit.steamIDQueue)
+
 	wg.whenDone(function()
 		local delay = 0
 
 		local url = string.format("https://gmod.pages.dev/realms/%s/players/batch", realm:GetString())
-		print("Making batch request", #currentRequest)
+		print("GMAuditPlayerLogs: Making batch request to ", url)
 		HTTP{
 			url=url,
 			method="POST",
@@ -60,7 +67,9 @@ function GMAudit.ProcessQueue()
 				authorization=token:GetString() 
 			},
 			success = function(code, body)
-				print("CODE", #currentRequest, code, body)
+				if code ~= 200 then
+					print("GMAuditPlayerLogs: batch player update failed with", code)
+				end
 			end,
 			type= "application/json",
 		}

@@ -19,8 +19,6 @@ local function handleNewEvent(event, dryRun)
                     
     local handler = eventHandlers[event.action]
     
-    print(event.action)
-    
     if handler then handler(event) end
 end
 

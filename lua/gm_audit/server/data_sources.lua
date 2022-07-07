@@ -1,7 +1,7 @@
 require("wait_group")
 
 GMAudit.DataSources = {
-    -- name
+    -- awarnName
     function(steamID, data, wg)
         local offlineData = sql.Query(string.format("SELECT * FROM awarn_offlinedata WHERE unique_id='%s'", steamID))
         if offlineData and #offlineData > 0 then
