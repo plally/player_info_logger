@@ -14,14 +14,10 @@ GMAudit.DataSources = {
     -- ulib
     function(steamID, data, wg)
         local ulibData = ULib.ucl.users[util.SteamIDFrom64(steamID)]
-        if not ulibData then 
-            wg.done()
-            return
+        if ulibData then 
+            data.ulibGroup = ulibData.group
+            data.ulibName = ulibData.name
         end
-
-        data.ulibGroup = ulibData.group
-        data.name = ulibData.name
-        data.ulibName = ulibData.name
 
         data.ulibBan = ULib.bans[util.SteamIDFrom64(steamID)]
         wg.done()
