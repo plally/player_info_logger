@@ -17,3 +17,21 @@ end )
 hook.Add( "PlayerDisconnected", "GMAudit_SyncData", function(ply)
     table.insert(GMAudit.steamIDQueue, 1, ply:SteamID64())
 end )
+
+hook.Add("ULibUserGroupChange", "GMAudit_SyncData", function(id, allows, denies, new_group, old_group)
+    table.insert(GMAudit.steamIDQueue, 1, util.SteamIDTo64(id))
+end)
+
+hook.Add("ULibUserRemoved", "GMAudit_SyncData", function(id, user_info)
+    table.insert(GMAudit.steamIDQueue, 1, util.SteamIDTo64(id))
+end)
+
+hook.Add("ULibPlayerUnBanned", "GMAudit_SyncData", function(id, ban_data)
+	table.insert(GMAudit.steamIDQueue, 1, util.SteamIDTo64(id))
+    GMAudit.SyncServerData()
+end
+
+hook.Add( "ULibPlayerBanned", "GMAudit_SyncData", function(id, _)
+	table.insert(GMAudit.steamIDQueue, 1, util.SteamIDTo64(id))
+    GMAudit.SyncServerData()
+end)
