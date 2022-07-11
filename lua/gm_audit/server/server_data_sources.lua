@@ -20,7 +20,7 @@ function GMAudit.SyncServerData()
         },
         success = function(code, body)
             if code ~= 200 then
-                print("GMAuditPlayerLogs: batch player update failed with", code)
+                print("GMAuditPlayerLogs:server update failed with", code)
             end
         end,
         type= "application/json",
