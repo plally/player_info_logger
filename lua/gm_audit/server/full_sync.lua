@@ -3,24 +3,39 @@ require("wait_group")
 GMAudit.steamIDQueue = {}
 function GMAudit.SyncAllUsers() 
 	local steamIDs = {}
-	local found = {}
 
-	for k, v in pairs(ULib.ucl.users) do
-		
-		if string.StartWith(k, "STEAM") then
-			local steamID64 = util.SteamIDTo64(k)
-			found[steamID64] = true
-			table.insert(steamIDs, steamID64)
-		end
+	for k, _ in pairs(ULib.ucl.users) do
+		table.insert(steamIDs, steamID64)
 	end
 
-	local offlineAwarnData = sql.Query("SELECT * FROM awarn_offlinedata") or {}
-	for k, v in pairs(offlineAwarnData) do
-		
+	for k, _ in pairs(ULib.ucl.bans) do
+		table.insert(steamIDs, steamID64)
+	end
+
+	local warnings = sql.Query("SELECT unique_id FROM awarn_warnings") or {}
+	for _, v in ipairs(warnings) do 
+		table.insert(steamIDs, v.unique_id) 
 	end
 
 	timer.Adjust("GMAudit_ProcessQueue", 1, nil, nil)
-	GMAudit.steamIDQueue = steamIDs
+
+	-- Copy steamIDs to uniqueSteamIDs without duplicates
+	local uniqueSteamIDs = {}
+	local found = {}
+	for _, v in ipairs(steamIDs) do
+		if not found[v] then
+			if string.StartWith(v, "STEAM") then
+				v = util.SteamIDTo64(v)
+			end
+
+			if #v == 17 then
+				table.insert(uniqueSteamIDs, v)
+				found[v] = true
+			end
+		end
+	end
+
+	GMAudit.steamIDQueue = uniqueSteamIDs
 end
 
 local MAX_BATCH_SIZE = 15
