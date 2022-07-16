@@ -1,4 +1,3 @@
-
 function GMAudit.SyncServerData()
     local realm = GetConVar( "gm_audit_realm" )
     local token =  GetConVar( "gm_audit_token" )

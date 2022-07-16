@@ -41,7 +41,7 @@ function GMAudit.ProcessQueue()
 		wg.add()
 		GMAudit.GetPlayerInfo(steamID, function(data)		
 			table.insert(currentRequest, {
-				id=steamID,
+				key=steamID,
 				data=data
 			})
 			wg.done()
