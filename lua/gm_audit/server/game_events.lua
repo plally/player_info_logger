@@ -32,6 +32,6 @@ hook.Add("ULibPlayerUnBanned", "GMAudit_SyncData", function(id, ban_data)
 end)
 
 hook.Add( "ULibPlayerBanned", "GMAudit_SyncData", function(id, _)
-        table.insert(GMAudit.steamIDQueue, 1, util.SteamIDTo64(id))
+    table.insert(GMAudit.steamIDQueue, 1, util.SteamIDTo64(id))
     GMAudit.SyncServerData()
 end)
