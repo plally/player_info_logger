@@ -1,21 +1,22 @@
 function GMAudit.SyncServerData()
-    local realm = GetConVar( "gm_audit_realm" )
-    local token =  GetConVar( "gm_audit_token" )
+    local realm = GetConVar( "gm_audit_realm" ):GetString()
+    local token =  GetConVar( "gm_audit_token" ):GetString()
     local data = {
         data={
             ulibBans=ULib.bans
         }
     }
-
+	
+	print(string.format("https://gmod.pages.dev/realms/%s/__data.json", realm))
     HTTP{
-        url="https://gmod.pages.dev/realms/cfc/cfc3/__data.json",
+        url=string.format("https://gmod.pages.dev/realms/%s/__data.json", realm),
         method="POST",
         body=util.TableToJSON(data),
         headers={
             Accept="application/json",	
         },
         headers= {
-            authorization=token:GetString() 
+            authorization=token 
         },
         success = function(code, body)
             if code ~= 200 then

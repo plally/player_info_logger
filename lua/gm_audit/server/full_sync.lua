@@ -8,7 +8,7 @@ function GMAudit.SyncAllUsers()
 		table.insert(steamIDs, steamID64)
 	end
 
-	for k, _ in pairs(ULib.ucl.bans) do
+	for k, _ in pairs(ULib.bans) do
 		table.insert(steamIDs, steamID64)
 	end
 

@@ -10,7 +10,7 @@ end)
 
 hook.Add( "PlayerInitialSpawn", "GMAudit_SyncData", function( ply, transition )
     if not transition then
-            table.insert(GMAudit.steamIDQueue, 1, ply:SteamID64())
+        table.insert(GMAudit.steamIDQueue, 1, ply:SteamID64())
     end
 end )
 
