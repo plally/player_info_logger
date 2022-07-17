@@ -55,6 +55,7 @@ function GMAudit.ProcessQueue()
 		local steamID = table.remove(GMAudit.steamIDQueue)
 		wg.add()
 		GMAudit.GetPlayerInfo(steamID, function(data)		
+			if table.Count(data) == 0 then return end
 			table.insert(currentRequest, {
 				key=steamID,
 				data=data
