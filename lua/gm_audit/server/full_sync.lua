@@ -5,11 +5,11 @@ function GMAudit.SyncAllUsers()
 	local steamIDs = {}
 
 	for k, _ in pairs(ULib.ucl.users) do
-		table.insert(steamIDs, steamID64)
+		table.insert(steamIDs, k)
 	end
 
 	for k, _ in pairs(ULib.bans) do
-		table.insert(steamIDs, steamID64)
+		table.insert(steamIDs, k)
 	end
 
 	local warnings = sql.Query("SELECT unique_id FROM awarn_warnings") or {}
@@ -84,6 +84,8 @@ function GMAudit.ProcessQueue()
 			success = function(code, body)
 				if code ~= 200 then
 					print("GMAuditPlayerLogs: batch player update failed with", code)
+					GMAudit.failedRequests = GMAudit.failedRequests or {}
+					table.insert(GMAudit.failedRequests, {request=currentRequest, code=code, body=body})
 				end
 			end,
 			type= "application/json",
