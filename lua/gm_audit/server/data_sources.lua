@@ -52,6 +52,15 @@ GMAudit.DataSources = {
         wg.done()
     end,
 
+    function(steamID, data, wg)
+        if TimedPunishments then
+            local punishments = TimedPunishments.Data:getPunishments:getPunishments("76561198001024067")
+            data.punishments = punishments
+        end
+
+        wg.done()
+    end,
+
     -- on the server
     function(steamID, data, wg)
         local ply = player.GetBySteamID64( steamID )
