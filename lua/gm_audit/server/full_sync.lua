@@ -17,7 +17,7 @@ function GMAudit.SyncAllUsers()
 		table.insert(steamIDs, v.unique_id) 
 	end
 
-	timer.Adjust("GMAudit_ProcessQueue", 1, nil, nil)
+	timer.Adjust("GMAudit_ProcessQueue", 5, nil, nil)
 
 	-- Copy steamIDs to uniqueSteamIDs without duplicates
 	local uniqueSteamIDs = {}
