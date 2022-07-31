@@ -54,7 +54,7 @@ GMAudit.DataSources = {
 
     function(steamID, data, wg)
         if TimedPunishments then
-            local punishments = TimedPunishments.Data:getPunishments:getPunishments("76561198001024067")
+            local punishments = TimedPunishments.Data:getPunishments(steamID)
             data.punishments = punishments
         end
 
