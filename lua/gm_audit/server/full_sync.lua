@@ -70,7 +70,7 @@ function GMAudit.ProcessQueue()
 	wg.whenDone(function()
 		local delay = 0
 
-		local url = string.format("https://gmod.pages.dev/realms/%s/players/batch/__data.json", realm:GetString())
+		local url = string.format("https://gmod.pages.dev/realms/%s/players/batch", realm:GetString())
 		print("GMAuditPlayerLogs: Making batch request to ", url)
 		HTTP{
 			url=url,
