@@ -1,3 +1,4 @@
+GMAudit.ServerDataURL = "https://gmod.pages.dev/api/realms/%s"
 function GMAudit.SyncServerData()
     local realm = GetConVar( "gm_audit_realm" ):GetString()
     local token =  GetConVar( "gm_audit_token" ):GetString()
@@ -7,9 +8,9 @@ function GMAudit.SyncServerData()
         }
     }
 	
-	print(string.format("https://gmod.pages.dev/realms/%s/__data.json", realm))
+	print(string.format(GMAudit.ServerDataURL, realm))
     HTTP{
-        url=string.format("https://gmod.pages.dev/realms/%s/__data.json", realm),
+        url=string.format(GMAudit.ServerDataURL, realm),
         method="POST",
         body=util.TableToJSON(data),
         headers={

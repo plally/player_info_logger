@@ -40,6 +40,7 @@ end
 
 local MAX_BATCH_SIZE = 15
 
+GMAudit.PlayerBatchURL = "https://gmod.pages.dev/api/realms/%s/players/batch"
 function GMAudit.ProcessQueue() 
 	if not GMAudit.steamIDQueue then return end
 	if #GMAudit.steamIDQueue <= 0 then 
@@ -70,7 +71,7 @@ function GMAudit.ProcessQueue()
 	wg.whenDone(function()
 		local delay = 0
 
-		local url = string.format("https://gmod.pages.dev/realms/%s/players/batch", realm:GetString())
+		local url = string.format(GMAudit.PlayerBatchURL, realm:GetString())
 		print("GMAuditPlayerLogs: Making batch request to ", url)
 		HTTP{
 			url=url,
