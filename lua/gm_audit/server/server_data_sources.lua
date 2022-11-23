@@ -29,6 +29,11 @@ function GMAudit.SyncServerData()
 
 end
 
+local function getAvatar(ply)
+    local succ, avatar = pcall(function() return ply.SteamLookup.PlayerSummary.response.players[1].avatarfull end)
+    if not succ then return end
+    return avatar
+end
 function GMAudit.SyncPlayers()
     local realm = GetConVar( "gm_audit_realm" ):GetString()
     local token =  GetConVar( "gm_audit_token" ):GetString()
@@ -38,7 +43,7 @@ function GMAudit.SyncPlayers()
 			steamID64 = ply:SteamID64(), 
 			name = ply:GetName(), 
 			rank = ply:GetUserGroup(),
-			avatarURL = ply.SteamLookup.PlayerSummary.response.players[1].avatarfull
+			avatarURL = getAvatar(ply)
 		}) 
 	end
 
