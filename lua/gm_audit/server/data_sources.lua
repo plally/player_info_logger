@@ -15,11 +15,11 @@ GMAudit.DataSources = {
     function(steamID, data, wg)
         local ulibData = ULib.ucl.users[util.SteamIDFrom64(steamID)]
         if ulibData then 
-            data.ulibGroup = ulibData.group
+            data.ulibGroup = ulibData.group or JSON_NULL
             data.ulibName = ulibData.name
         end
 
-        data.ulibBan = ULib.bans[util.SteamIDFrom64(steamID)]
+        data.ulibBan = ULib.bans[util.SteamIDFrom64(steamID)] or JSON_NULL
         wg.done()
     end,
 

@@ -1,5 +1,12 @@
 require("wait_group")
 
+JSON_NULL = util.SHA256( tostring(os.time()) .. "JSON_NULL" )
+function TableToJSONWithNull( tbl )
+	local out = util.TableToJSON(tbl)
+	
+	return string.Replace(out, '"'..JSON_NULL..'"', "null")
+end
+
 GMAudit.steamIDQueue = {}
 function GMAudit.SyncAllUsers() 
 	local steamIDs = {}
@@ -76,7 +83,7 @@ function GMAudit.ProcessQueue()
 		HTTP{
 			url=url,
 			method="POST",
-			body=util.TableToJSON(currentRequest),
+			body=TableToJSONWithNull(currentRequest),
 			headers={
 				Accept="application/json",	
 			},
