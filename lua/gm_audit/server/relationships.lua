@@ -36,7 +36,7 @@ function GMAudit.checkRelationships()
                 end
             end
         end
-		ply.relationshipsProcessed = false -- TODO only set this to true if they change
+        ply.relationshipsProcessed = false -- TODO only set this to true if they change
         ply.validatedRelationships = validatedRelationships
     end
 end
@@ -70,7 +70,6 @@ function GMAudit.CreateRelationship(item)
         },
         success = function(code, body)
             if code ~= 200 then
-            	me:ChatPrint("HI")
                 print("GMAudit: relationships update failed", code)
             end
         end,
