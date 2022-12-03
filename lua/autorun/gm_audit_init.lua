@@ -11,5 +11,5 @@ if SERVER then
     
     AddCSLuaFile("gm_audit/client/relationships.lua")
 else
-    include("gm_audit/client/relationship.lua")
+    include("gm_audit/client/relationships.lua")
 end
