@@ -46,13 +46,14 @@ timer.Create("GMAudit_RelationshipsAggregate", 15, 0, function()
     for _, ply in pairs(player.GetHumans()) do 
         for steamID, relationship in pairs(ply.validatedRelationships or {}) do
             if relationship ~= "none" and not ply.relationshipsProcessed then -- use none status to clean up relationships
-                ply.relationshipsProcessed = true
                 GMAudit.CreateRelationship({
                     ["type"] = "client_"..relationship,
                     ["player_id"] = ply:SteamID64(),
                     ["other_player_id"] = steamID,
                 })
             end
+
+            ply.relationshipsProcessed = true
         end
     end
 end)
