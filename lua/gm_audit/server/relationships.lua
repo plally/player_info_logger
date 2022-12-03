@@ -52,9 +52,8 @@ timer.Create("GMAudit_RelationshipsAggregate", 15, 0, function()
                     ["other_player_id"] = steamID,
                 })
             end
-
-            ply.relationshipsProcessed = true
         end
+        ply.relationshipsProcessed = true
     end
 end)
 
