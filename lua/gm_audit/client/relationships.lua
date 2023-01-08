@@ -1,7 +1,10 @@
 timer.Create("GMAudit_Upload", 120, 0, function()
     local relationships = {}
     for _, v in pairs(player.GetHumans()) do
-        relationships[v:SteamID64()] = v:GetFriendStatus()
+        local steamID = v:SteamID64()
+        if steamID then
+            relationships[steamID] = v:GetFriendStatus()
+        end
     end
 
     net.Start("GMAudit_Relationships")
