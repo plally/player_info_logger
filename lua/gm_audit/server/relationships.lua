@@ -1,4 +1,4 @@
-GMAudit.RelationshipsBaseURL = "https://gm_audit_backend.vulpes.workers.dev/v1/players/relationships"
+GMAudit.RelationshipsBaseURL = "https://gmod.pages.dev/api/realms/%s/relationships"
 util.AddNetworkString("GMAudit_Relationships")
 net.Receive("GMAudit_Relationships", function(_, ply) -- TOOD should store in own table so relationships can still be uploaded if player leaves
     ply.relationships = net.ReadTable()
@@ -58,15 +58,19 @@ timer.Create("GMAudit_RelationshipsAggregate", 15, 0, function()
 end)
 
 function GMAudit.CreateRelationship(item)
+	local realm = GetConVar( "gm_audit_realm" )
+	local token =  GetConVar( "gm_audit_token" )
+	local url =string.format(GMAudit.RelationshipsBaseURL, realm:GetString())
+
     HTTP{
-        url=GMAudit.RelationshipsBaseURL,
+        url=url,
         method="POST",
         body=util.TableToJSON(item),
         headers={
             Accept="application/json",	
         },
         headers= {
-            -- authorization=token:GetString() 
+            authorization=token:GetString() 
         },
         success = function(code, body)
             if code ~= 200 then
