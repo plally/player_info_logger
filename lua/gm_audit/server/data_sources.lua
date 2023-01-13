@@ -54,7 +54,7 @@ GMAudit.DataSources = {
 
     function(steamID, data, wg)
         if TimedPunishments then
-            local punishments = TimedPunishments.Data:getPunishments(steamID)
+            local punishments = TimedPunishments.Data:getActivePunishments(steamID)
             data.punishments = punishments
             if table.Count(data.punishments) == 0 then
                 data.punishments = JSON_NULL
