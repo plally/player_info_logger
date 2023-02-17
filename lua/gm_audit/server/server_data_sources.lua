@@ -53,7 +53,6 @@ function GMAudit.SyncPlayers()
         }
     }
 	
-	print(string.format(GMAudit.ServerDataURL, realm))
     HTTP{
         url=string.format(GMAudit.ServerDataURL, realm),
         method="POST",

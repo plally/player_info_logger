@@ -31,8 +31,8 @@ function GMAudit.checkRelationships()
                 local otherRelationship = otherPly.relationships[ply:SteamID64()]
                 if checkRelationshipPairs(relationship, otherRelationship) then
                     validatedRelationships[otherSteamID] = relationship
-                else
-                    print(ply:GetName() .." is "..relationship.." with "..otherPly:GetName().. " but "..otherPly:GetName().." is not "..requiredRelationships[relationship])
+                -- else
+                --     print(ply:GetName() .." is "..relationship.." with "..otherPly:GetName().. " but "..otherPly:GetName().." is not "..requiredRelationships[relationship])
                 end
             end
         end
