@@ -1,19 +1,22 @@
+-- disable for now
+do return end
+
 GMAudit.RelationshipsBaseURL = "https://gmod.pages.dev/api/realms/%s/relationships"
-util.AddNetworkString("GMAudit_Relationships")
-net.Receive("GMAudit_Relationships", function(_, ply) -- TOOD should store in own table so relationships can still be uploaded if player leaves
+util.AddNetworkString( "GMAudit_Relationships" )
+net.Receive( "GMAudit_Relationships", function( _, ply ) -- TOOD should store in own table so relationships can still be uploaded if player leaves
     ply.relationships = net.ReadTable()
-end)
+end )
 
 local requiredRelationships = {
     friend = "friend",
     request = "requestrecipient"
 }
 
-for k, v in pairs(requiredRelationships) do
+for k, v in pairs( requiredRelationships ) do
     requiredRelationships[v] = k
 end
 
-function checkRelationshipPairs(a, b) 
+function checkRelationshipPairs( a, b )
     local expected = requiredRelationships[a]
     if expected then
         return b == expected
@@ -21,18 +24,17 @@ function checkRelationshipPairs(a, b)
     return true
 end
 
-
 function GMAudit.checkRelationships()
-    for _, ply in pairs(player.GetHumans()) do  -- TODO get rid of scope pyramid
+    for _, ply in pairs( player.GetHumans() ) do -- TODO get rid of scope pyramid
         local validatedRelationships = {}
-        for otherSteamID, relationship in pairs(ply.relationships or {}) do
-            local otherPly = player.GetBySteamID64(otherSteamID)
-            if IsValid(otherPly) and otherPly.relationships then
+        for otherSteamID, relationship in pairs( ply.relationships or {} ) do
+            local otherPly = player.GetBySteamID64( otherSteamID )
+            if IsValid( otherPly ) and otherPly.relationships then
                 local otherRelationship = otherPly.relationships[ply:SteamID64()]
-                if checkRelationshipPairs(relationship, otherRelationship) then
+                if checkRelationshipPairs( relationship, otherRelationship ) then
                     validatedRelationships[otherSteamID] = relationship
-                -- else
-                --     print(ply:GetName() .." is "..relationship.." with "..otherPly:GetName().. " but "..otherPly:GetName().." is not "..requiredRelationships[relationship])
+                    -- else
+                    --     print(ply:GetName() .." is "..relationship.." with "..otherPly:GetName().. " but "..otherPly:GetName().." is not "..requiredRelationships[relationship])
                 end
             end
         end
@@ -41,42 +43,42 @@ function GMAudit.checkRelationships()
     end
 end
 
-timer.Create("GMAudit_RelationshipsAggregate", 15, 0, function()
+timer.Create( "GMAudit_RelationshipsAggregate", 15, 0, function()
     GMAudit.checkRelationships()
-    for _, ply in pairs(player.GetHumans()) do 
-        for steamID, relationship in pairs(ply.validatedRelationships or {}) do
+    for _, ply in pairs( player.GetHumans() ) do
+        for steamID, relationship in pairs( ply.validatedRelationships or {} ) do
             if relationship ~= "none" and not ply.relationshipsProcessed then -- use none status to clean up relationships
-                GMAudit.CreateRelationship({
-                    ["type"] = "client_"..relationship,
+                GMAudit.CreateRelationship( {
+                    ["type"] = "client_" .. relationship,
                     ["player_id"] = ply:SteamID64(),
                     ["other_player_id"] = steamID,
-                })
+                } )
             end
         end
         ply.relationshipsProcessed = true
     end
-end)
+end )
 
-function GMAudit.CreateRelationship(item)
-	local realm = GetConVar( "gm_audit_realm" )
-	local token =  GetConVar( "gm_audit_token" )
-	local url =string.format(GMAudit.RelationshipsBaseURL, realm:GetString())
+function GMAudit.CreateRelationship( item )
+    local realm = GetConVar( "gm_audit_realm" )
+    local token = GetConVar( "gm_audit_token" )
+    local url = string.format( GMAudit.RelationshipsBaseURL, realm:GetString() )
 
-    HTTP{
-        url=url,
-        method="POST",
-        body=util.TableToJSON(item),
-        headers={
-            Accept="application/json",	
+    HTTP {
+        url = url,
+        method = "POST",
+        body = util.TableToJSON( item ),
+        headers = {
+            Accept = "application/json",
         },
-        headers= {
-            authorization=token:GetString() 
+        headers = {
+            authorization = token:GetString()
         },
-        success = function(code, body)
+        success = function( code, body )
             if code ~= 200 then
-                print("GMAudit: relationships update failed", code)
+                print( "GMAudit: relationships update failed", code )
             end
         end,
-        type= "application/json",
+        type = "application/json",
     }
 end
